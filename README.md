@@ -2,6 +2,7 @@
 
 Sistema embebido de monitoreo ambiental y detección de presencia, desarrollado con **Arduino UNO R4 WiFi**. El proyecto utiliza sensores para recopilar datos del entorno, evalúa las condiciones mediante una **Máquina de Estados Finitos (FSM)** y muestra los resultados localmente y en Arduino Cloud.
 
+
 ## Características principales
 
 - **Monitoreo ambiental:** lectura de temperatura, humedad relativa, calidad del aire e iluminación.
@@ -12,6 +13,7 @@ Sistema embebido de monitoreo ambiental y detección de presencia, desarrollado 
 - **Código modular:** separación de la lógica del sistema, las propiedades de la nube y las credenciales de conexión.
 
 > **Nota:** El sensor MQ-135 proporciona lecturas analógicas orientativas. Este prototipo es académico y no sustituye equipos certificados de detección de gases ni sistemas de seguridad profesionales.
+
 
 ## Hardware utilizado
 
@@ -37,14 +39,13 @@ El sistema evalúa las lecturas de los sensores y asigna un estado global según
 | Estado | Condición implementada | Indicador y respuesta |
 |---|---|---|
 | `CRITICO` | Temperatura superior a 35 °C, lectura MQ-135 superior a 300 ADC o iluminación inferior al 20 % | LED rojo y activación del buzzer |
-| `ADVERTENCIA` | Sin condición crítica y temperatura superior a 28 °C, lectura MQ-135 superior a 100 ADC o presencia detectada | LED amarillo y buzzer silenciado |
+| `ADVERTENCIA` | Sin condición crítica y temperatura superior a 28 °C, lectura MQ-135 superior a 150 ADC o presencia detectada | LED amarillo y buzzer silenciado |
 | `NORMAL` | No se cumple ninguna condición anterior | LED azul y buzzer apagado |
 
 La evaluación sigue el orden de prioridad **CRITICO → ADVERTENCIA → NORMAL**.
 
 El comportamiento del LED rojo en el código documentado es de encendido fijo. El buzzer recibe una orden de tono de 500 ms cuando se cumple una condición crítica.
 
-> **Importante:** los umbrales anteriores describen la lógica del código. La matriz de diseño del informe presenta algunas diferencias, especialmente en el umbral de calidad del aire y en la condición de oscuridad con presencia. Si actualizas el firmware, mantén esta tabla sincronizada con la implementación definitiva.
 
 ## Variables sincronizadas con Arduino Cloud
 
@@ -62,10 +63,11 @@ La humedad relativa se mantiene como variable local y se muestra en la pantalla 
 
 Para visualizar las lecturas, crea un **Thing** en Arduino Cloud, vincula la placa y configura las cinco propiedades con los nombres y tipos compatibles con el firmware. El dashboard debe configurarse con los widgets que se deseen utilizar.
 
+
 ## Estructura del repositorio
 
 ```text
-laboratorio-iot-monitoreo/
+ArduinoIoT/
 ├── ArduinoIoT.ino
 ├── thingProperties.h
 ├── arduino_secrets.h.example
@@ -100,6 +102,7 @@ Antes de cargar el proyecto, necesitarás:
 
 Instala las bibliotecas desde el Library Manager de Arduino IDE cuando sea necesario.
 
+
 ## Instalación y configuración
 
 ### 1. Clonar el repositorio
@@ -109,10 +112,6 @@ git clone https://github.com/mrcris-cb99/arduino-IoTlab.git
 ```
 
 ### 2. Configurar las credenciales Wi-Fi
-
-Crea localmente un archivo llamado `arduino_secrets.h` a partir de la plantilla `arduino_secrets.h.example`.
-
-El archivo local debe definir las macros que espera el firmware:
 
 ```cpp
 #define SECRET_SSID "Nombre_de_tu_WiFi"
@@ -138,6 +137,7 @@ El archivo local debe definir las macros que espera el firmware:
 6. Abre el monitor serie para comprobar las lecturas y los mensajes de diagnóstico.
 7. Verifica la visualización en la OLED y la sincronización con Arduino Cloud.
 
+
 ## Calibración y pruebas
 
 Antes de evaluar el funcionamiento, ten en cuenta las recomendaciones documentadas:
@@ -155,6 +155,7 @@ Antes de evaluar el funcionamiento, ten en cuenta las recomendaciones documentad
 - Mejorar la calibración y el filtrado de los sensores.
 - Unificar la matriz de estados del informe con las condiciones definitivas del firmware.
 - Implementar mecanismos de recuperación ante errores de sensores o pérdida de conexión.
+
 
 ## Licencia
 
